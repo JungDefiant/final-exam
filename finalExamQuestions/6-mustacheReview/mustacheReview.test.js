@@ -59,16 +59,19 @@ let characters = [
 ];
 
 let $ = createSnippetWithJQuery(`
-<h2> {{ name }} </h2>
-<h3> {{ spouse }} </h3>
-{{#children}}
-* {{.}}
-{{/children}}
-<p> {{ house }} </p>
-`)
+    <h2> {{ name }} </h2>
+    <h3> {{ spouse }} </h3>
+    {{#children}}
+    * {{.}}
+    {{/children}}
+    <p> {{ house }} </p>
+  `)
 
 const templatingWithMustache = () => {
-  // Solution code here...
+  return characters.map(val => {
+    let template = $('body').html();
+    return "\n    " + Mustache.render(template, val);
+  })
 }
 
 describe('Testing challenge', () => {
