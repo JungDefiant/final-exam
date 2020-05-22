@@ -33,7 +33,7 @@ const starWars = {
     ]}
   }}
 
-$ = createSnippetWithJQuery(`
+let $ = createSnippetWithJQuery(`
 <main>
   <section id="template">
     <h2></h2>
@@ -44,7 +44,15 @@ $ = createSnippetWithJQuery(`
 `);
 
 const templatingWithJQuery = () => {
-  // Solution code here ...
+  const template = $('#template');
+  starWars.keyPlayers.force.light.forEach(val => {
+    let newStarWars = template.clone();
+    newStarWars.attr('');
+    newStarWars.find('h2').text(`${val.name}`);
+    newStarWars.find('h3').text(`${val.height}`);
+    newStarWars.find('p').text(`${val.eye_color}`);
+    $('main').append(newStarWars);
+  });
 }
 
 describe('Testing challenge', () => {
