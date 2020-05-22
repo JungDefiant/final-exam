@@ -21,7 +21,7 @@ let $ = createSnippetWithJQuery(`
 `);
 
 const generateSubmitButton = () => {
-// Solution code here ...
+  $('form').append('<button>submit</button>');
 }
 
 describe('Testing challenge', () => {
