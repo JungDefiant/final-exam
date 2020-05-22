@@ -9,7 +9,7 @@ Without altering the html, first write a function named makeUniqueList. This fun
 
 Next, write a function named generateDropDown. This function needs to use jQuery to create a select form element with options for each UNIQUE cat from the array of cats, and append it to the DOM. 
 ------------------------------------------------------------------------------------------------ */
-$ = createSnippetWithJQuery(`
+let $ = createSnippetWithJQuery(`
 <section>
   <form>
     <legend>Which is the best cat?</legend>
@@ -20,11 +20,18 @@ $ = createSnippetWithJQuery(`
 const cats = ['grumpy cat', 'hello kitty', 'garfield', 'cheshire cat', 'lil bub', 'garfield', 'hello kitty', 'grumpy cat', 'garfield', 'cheshire cat', 'grumpy cat', 'hello kitty', 'lil bub', 'lil bub', 'tigger', 'cheshire cat'];
 
 const generateDropDown = () => {
-// Solution code here ...
+  $('form').append('<select></select>');
+  makeUniqueList().forEach(val => {
+    $('select').append(`<option value=${val}>${val}</option>`);
+  })
 }
 
 const makeUniqueList = () => {
-// Solution code here ...
+  const uniqueCats = [];
+  cats.forEach(val => {
+    if(!uniqueCats.includes(val)) uniqueCats.push(val);
+  })
+  return uniqueCats;
 }
 
 describe('Testing challenge', () => {
