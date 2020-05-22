@@ -2,8 +2,6 @@ const Nightmare = require('nightmare')
 const chai = require('chai')
 const expect = chai.expect
 
-
-
 describe('Building an Express Server with a Postgres Database', ()=>{
   it('should load all pokemon', function(done) {
     const nightmare = Nightmare({ show: false })
