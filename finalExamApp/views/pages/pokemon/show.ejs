@@ -6,12 +6,13 @@
   <title>Pokemon List</title>
 </head>
 <body>
-  <form action="/add">
+  <a href="/favorites">Go to Favorites!</a>
   <% pokemonNames.forEach(val => { %>
-    <h2><%= val %></h2>
-    <input></input>
-    <button>Add to Favorites</button>
+    <form action="/add" method="POST">
+      <h2><%= val %></h2>
+      <input hidden name="favorite" value="<%= val %>">
+      <button>Add to Favorites</button>
+    </form>
   <% }) %>
-  </form>
 </body>
 </html>

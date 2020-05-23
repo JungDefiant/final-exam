@@ -3,39 +3,65 @@
 const superagent = require('superagent');
 const express = require('express');
 const pg = require('pg');
-const app = express();
+
 require('dotenv').config();
+const PORT = process.env.PORT || 3002;
+const app = express();
+
+const client = new pg.Client(process.env.DATABASE_URL);
+client.on('error', console.error);
+client.connect();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('./public'));
+app.set('view engine', 'ejs');
 
 const url = 'https://pokeapi.co/api/v2/pokemon/';
+const sqlDatabaseName = 'favorite_pokemon';
 
 app.get('/', (req, res) => {
   console.log('Getting pokemon data!');
   superagent(url)
     .then(request => {
-      console.log('Alphabetizing pokemon data!');
       const allPokemon = alphabetizePokemon(request.body.results);
-      console.log('Rendering data to screen!');
-      res.render('/pages/pokemon/show.ejs', { 'pokemonNames' : allPokemon });
+      res.render('pages/pokemon/show.ejs', { 'pokemonNames' : allPokemon });
+    })
+    .catch(console.log);
+})
+
+app.get('/favorites', (req, res) => {
+  //loads favorite pokemon database from sql
+  //renders pokemon from sql to favorites page
+  client.query(`SELECT * FROM ${sqlDatabaseName}`)
+    .then(result => {
+      console.log(result.rows);
+      res.render('pages/favorites/show.ejs', { 'favoritePokemon' : result.rows });
+    })
+    .catch(console.log);
+  
+})
+
+app.post('/add', (req, res) => {
+  //get req.body.favorite and add it to favorite pokemon database in sql
+  //INSERT INTO table_name VALUES (value_1, value_2,....)
+  console.log(req.body.favorite);
+  client.query(`INSERT INTO ${sqlDatabaseName}(name) VALUES($1);`, [req.body.favorite])
+    .then(result => {
+      console.log(req.body.favorite + " added!");
+      res.redirect('/');
     })
     .catch(console.log);
 })
 
 function alphabetizePokemon(arr) {
   const pokeNames = [];
-  for(let i = 0; i < arr.length; i++) {
-    let thisPokemon = arr[i];
-    for(let j = i + 1; j < arr.length; i++) {
-      let nextPokemon = arr[j];
-      if(thisPokemon.name.charAt(0) > nextPokemon.name.charAt(0)) {
-        let pokemonToSwitch = nextPokemon;
-        arr[j] = thisPokemon;
-        arr[i] = pokemonToSwitch;
-      }
+  for(let i = 0; i < 20; i++) {
+    if(arr[i]) {
+      pokeNames.push(arr[i].name);
     }
-    pokeNames.push(arr[i]);
   }
-  console.log(pokeNames);
+  pokeNames.sort();
   return pokeNames;
 }
 
-app.listen(3002, (req, res) => console.log('Listening on port 3002!'));
+app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));

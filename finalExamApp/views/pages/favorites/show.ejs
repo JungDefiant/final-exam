@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Favorite Pokemon</title>
+</head>
+<body>
+  <a href="/">Return to main page</a>
+  <ul>
+  <% favoritePokemon.forEach(val => { %>
+    <li><%=val.name %></li>
+  <% }) %>
+  </ul>
+</body>
+</html>
